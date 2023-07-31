@@ -52,6 +52,26 @@ final class HomeView: UIView {
         setupViews()
     }
     
+    private func setupViews() {
+        [textField, collectionView]
+            .forEach {
+                $0.translatesAutoresizingMaskIntoConstraints = false
+                addSubview($0)
+            }
+        
+        NSLayoutConstraint.activate([
+            textField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Constant.padding),
+            textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.padding),
+            textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.padding),
+            textField.heightAnchor.constraint(equalToConstant: Constant.textFieldHeight),
+            
+            collectionView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: Constant.padding),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
+    
     private func createLayout() -> UICollectionViewCompositionalLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
