@@ -31,3 +31,25 @@ final class Network {
             return Disposables.create { request.cancel() }
         }
     }
+    
+    func post(url: String, parameters: [String: Any]) -> Observable<Result<Data?, AFError>> {
+        return Observable.create { observer in
+            let request = AF.request(url,
+                                     method: .post,
+                                     parameters: parameters,
+                                     encoding: JSONEncoding.default)
+                             .validate()
+                             .response { response in
+                                switch response.result {
+                                case .success(let data):
+                                    observer.onNext(.success(data))
+                                case .failure(let error):
+                                    observer.onNext(.failure(error))
+                                }
+                                observer.onCompleted()
+                             }
+            
+            return Disposables.create { request.cancel() }
+        }
+    }
+}
