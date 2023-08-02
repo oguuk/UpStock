@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "bigFall 1.png",
+      "filename" : "bigFall.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "bigFall.png",
+      "filename" : "bigFall 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
