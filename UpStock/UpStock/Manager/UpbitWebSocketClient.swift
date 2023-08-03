@@ -39,3 +39,28 @@ final class UpbitWebSocketClient {
         self.socket.write(string: self.request)
     }
 }
+
+extension UpbitWebSocketClient: WebSocketDelegate {
+
+    func didReceive(event: WebSocketEvent, client: WebSocket) {
+        switch event {
+        case .connected(let headers):
+            isConnected = true
+            print("websocket is connected: \(headers)")
+            self.send()
+        case .disconnected(let reason, let code):
+            isConnected = false
+            print("websocket is disconnected: \(reason) with code: \(code)")
+        case .text(let string):
+            print("Received text: \(string)")
+        case .binary(let data):
+            dataSubject.onNext(data)
+        case .ping(_), .pong(_), .viabilityChanged(_), .reconnectSuggested(_), .cancelled:
+            break
+        case .error(let error):
+            isConnected = false
+            print("Error: \(error?.localizedDescription ?? "")")
+            dataSubject.onError(error ?? NSError(domain: "", code: -1, userInfo: nil))
+        }
+    }
+}
