@@ -51,3 +51,19 @@ final class CoreDataManager {
         }
         return data
     }
+    
+    private func existEntityWith(uniqueValue: String, entityName: String) -> Bool {
+        guard let context = context else { return false }
+        
+        let request = NSFetchRequest<NSManagedObject>(entityName: entityName)
+        request.predicate = NSPredicate(format: "koreanName == %@", uniqueValue)
+        
+        do {
+            let existingData = try context.fetch(request)
+            return existingData.count > 0
+        } catch {
+            print("Failed to fetch data: \(error)")
+            return false
+        }
+    }
+}
