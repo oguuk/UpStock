@@ -40,3 +40,14 @@ final class CoreDataManager {
             print("Failed to save data: \(error)")
         }
     }
+    
+    func fetch<T: NSManagedObject>(type: T.Type) -> [T]? {
+        guard let context else { return nil }
+        var data: [T]?
+        do {
+            data = try context.fetch(type.fetchRequest()) as? [T]
+        } catch {
+            print(error.localizedDescription)
+        }
+        return data
+    }
