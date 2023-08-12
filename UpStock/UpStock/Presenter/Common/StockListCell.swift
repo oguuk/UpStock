@@ -137,3 +137,33 @@ final class StockListCell: UICollectionViewCell {
         tradingVolume.text = "\(ticker.accTradePrice24H.toPercentage(3))"
         fluctuationRate.text = "\(ticker.signedChangeRate.toPercentage(2, 100))%"
     }
+    
+    func configureCandleImage(ticker data: WebsocketTickerResponse) {
+        var curr = Int(data.tradePrice), open = data.openingPrice, high = data.highPrice, low = data.lowPrice
+        
+        if curr > open {
+            if high == curr {
+                if open == low { change.image = UIImage(named: "bigRise.png") }
+                else { change.image = UIImage(named: "rise1.png") }
+            } else {
+                if  open == low { change.image = UIImage(named: "rise3.png") }
+                else { change.image = UIImage(named: "rise2.png") }
+            }
+        } else if curr < open {
+            if low == curr {
+                if open == high { change.image = UIImage(named: "bigFall.png") }
+                else { change.image = UIImage(named: "fall3.png") }
+            } else {
+                if  open == high { change.image = UIImage(named: "fall1.png") }
+                else { change.image = UIImage(named: "fall2.png") }
+            }
+        } else {
+            if high == curr {
+                if open == low { change.image = UIImage(named: "even.png") }
+                else { change.image = UIImage(named: "even1.png") }
+            } else {
+                if  open == low { change.image = UIImage(named: "even3.png") }
+                else { change.image = UIImage(named: "even2.png") }
+            }
+        }
+    }
