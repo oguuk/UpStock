@@ -167,3 +167,24 @@ final class StockListCell: UICollectionViewCell {
             }
         }
     }
+    
+    func highlightPrice(isRising: Bool) {
+        if isRising {
+            flashBorder(of: price, cgColor: UIColor.green.cgColor)
+        } else {
+            flashBorder(of: price, cgColor: UIColor.systemPink.cgColor)
+        }
+    }
+    
+    private func flashBorder(of label: UILabel, cgColor: CGColor) {
+        let animation = CABasicAnimation(keyPath: "borderColor")
+        animation.fromValue = UIColor.clear.cgColor
+        animation.toValue = cgColor
+        animation.duration = 0.5
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+        animation.autoreverses = true
+
+        label.layer.borderWidth = 1.0
+        label.layer.add(animation, forKey: "borderColor")
+    }
+}
