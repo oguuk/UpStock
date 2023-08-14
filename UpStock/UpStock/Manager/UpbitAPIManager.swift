@@ -50,3 +50,21 @@ final class UpbitAPIManager {
             return Disposables.create { disposable.dispose() }
         }
     }
+    
+    private func handleSuccess<T: Codable>(data: Data?, observer: AnyObserver<[T]?>) {
+        guard let data = data else {
+            observer.onError(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Data is nil"]))
+            return
+        }
+        
+        do {
+            let response = try JSONDecoder().decode([T].self, from: data)
+            observer.onNext(response)
+            observer.onCompleted()
+        } catch {
+            print("Decoding error: \(error)")
+            observer.onError(error)
+        }
+
+    }
+}
