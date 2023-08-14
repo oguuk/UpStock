@@ -35,3 +35,18 @@ final class UpbitAPIManager {
             return Disposables.create { disposable.dispose() }
         }
     }
+    
+    func fetchUpbitTradableMarkets() -> Observable<[Market]?> {
+        return Observable.create { observer in
+            let disposable = Network.default.get(url: Constant.baseURL + Constant.pathOfCheckMarketCode)
+                .subscribe(onNext: { result in
+                    switch result {
+                    case let.success(data):
+                        self.handleSuccess(data: data, observer: observer)
+                    case let .failure(error):
+                        observer.onError(error)
+                    }
+                })
+            return Disposables.create { disposable.dispose() }
+        }
+    }
