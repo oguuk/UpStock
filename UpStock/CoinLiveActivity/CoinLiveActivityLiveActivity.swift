@@ -38,6 +38,63 @@ public struct CoinLiveActivityAttributes: ActivityAttributes {
     // Fixed non-changing properties about your activity go here!
     public var coinName: String
 }
+
+struct CoinLiveActivityLiveActivity: Widget {
+    
+    var body: some WidgetConfiguration {
+        ActivityConfiguration(for: CoinLiveActivityAttributes.self) { context in
+            
+            let color = context.state.state > -1 ? context.state.state == 0 ? Color.gray : Color.green : Color.pink
+            
+            // Lock screen/banner UI goes here
+            VStack {
+                HStack {
+                    
+                    HStack {
+                        Image(context.state.imageName)
+                            .resizable()
+                            .frame(width: 10, height: 30)
+                            .scaledToFit()
+
+                        Text(context.attributes.coinName)
+                            .font(.callout)
+                            .foregroundColor(Color.white)
+                    }
+                    .padding(.leading, 12)
+                    
+                    HStack {
+                        VStack {
+                            Spacer()
+                            Text(context.state.price)
+                                .fontWeight(.semibold)
+                                .foregroundColor(color)
+                            Spacer()
+                        }
+                    }
+                    .padding(.leading, 8)
+                    .padding(.trailing, 8)
+                    
+                    HStack {
+                        VStack {
+                            Spacer()
+                            Text(context.state.priceFluctuation)
+                                .font(.caption2)
+                                .foregroundColor(color)
+                            Text(context.state.tradeVolume)
+                                .font(.caption2)
+                                .foregroundColor(.white)
+                            Spacer()
+                        }
+                        Text(context.state.fluctuationRate)
+                            .fontWeight(.bold)
+                            .padding(.trailing, 12)
+                            .foregroundColor(color)
+                    }
+                }
+            }
+            .activityBackgroundTint(Color.black)
+            .activitySystemActionForegroundColor(Color.red)
+
 }
 
 struct CoinLiveActivityLiveActivity_Previews: PreviewProvider {
