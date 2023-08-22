@@ -10,6 +10,34 @@ import WidgetKit
 import SwiftUI
 
 public struct CoinLiveActivityAttributes: ActivityAttributes {
+    
+    public init(coinName: String) { self.coinName = coinName }
+    
+    public struct ContentState: Codable, Hashable {
+        // Dynamic stateful properties about your activity go here!
+        
+        public init(imageName: String, price: String,
+             tradeVolume: String, fluctuationRate: String,
+             priceFluctuation: String, state: Int) {
+            self.imageName = imageName
+            self.price = price
+            self.tradeVolume = tradeVolume
+            self.fluctuationRate = fluctuationRate
+            self.priceFluctuation = priceFluctuation
+            self.state = state
+        }
+        
+        public var imageName: String
+        public var price: String
+        public var tradeVolume: String
+        public var fluctuationRate: String
+        public var priceFluctuation: String
+        public var state: Int
+    }
+
+    // Fixed non-changing properties about your activity go here!
+    public var coinName: String
+}
 }
 
 struct CoinLiveActivityLiveActivity_Previews: PreviewProvider {
