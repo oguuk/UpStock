@@ -17,8 +17,8 @@ public struct CoinLiveActivityAttributes: ActivityAttributes {
         // Dynamic stateful properties about your activity go here!
         
         public init(imageName: String, price: String,
-             tradeVolume: String, fluctuationRate: String,
-             priceFluctuation: String, state: Int) {
+                    tradeVolume: String, fluctuationRate: String,
+                    priceFluctuation: String, state: Int) {
             self.imageName = imageName
             self.price = price
             self.tradeVolume = tradeVolume
@@ -34,17 +34,17 @@ public struct CoinLiveActivityAttributes: ActivityAttributes {
         public var priceFluctuation: String
         public var state: Int
     }
-
+    
     // Fixed non-changing properties about your activity go here!
     public var coinName: String
 }
 
 struct CoinLiveActivityLiveActivity: Widget {
-    
+        
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: CoinLiveActivityAttributes.self) { context in
             
-            let color = context.state.state > -1 ? context.state.state == 0 ? Color.gray : Color.green : Color.pink
+            let color = context.state.state > -1 ? (context.state.state == 0 ? Color.gray : Color.green) : Color.pink
             
             // Lock screen/banner UI goes here
             VStack {
@@ -131,7 +131,7 @@ struct CoinLiveActivityLiveActivity_Previews: PreviewProvider {
         fluctuationRate: "-1.2%",
         priceFluctuation: "-1,000,000",
         state: 1)
-
+    
     static var previews: some View {
         attributes
             .previewContext(contentState, viewKind: .dynamicIsland(.compact))
