@@ -100,23 +100,34 @@ struct CoinLiveActivityLiveActivity: Widget {
                 // Expanded UI goes here.  Compose the expanded UI through
                 // various regions, like leading/trailing/center/bottom
                 DynamicIslandExpandedRegion(.leading) {
-                    Text("Leading")
+                    Text(context.attributes.coinName)
+                        .font(.system(size: 12, weight: .heavy))
+                        .padding(.leading, 12)
+                        .padding(.top, 8)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    Text("Trailing")
+                    Text(context.state.price)
+                        .font(.system(size: 12, weight: .heavy))
+                        .foregroundColor(context.state.state > -1 ? (context.state.state == 0 ? Color.gray : Color.green) : Color.pink)
+                        .padding(.trailing, 12)
+                        .padding(.top, 8)
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    Text("Bottom")
+                    Text(context.state.fluctuationRate)
+                        .font(.system(size: 12, weight: .heavy))
+                        .foregroundColor(context.state.state > -1 ? (context.state.state == 0 ? Color.gray : Color.green) : Color.pink)
                     // more content
                 }
             } compactLeading: {
-                Text("L")
+                Text(context.attributes.coinName)
+                    .font(.system(size: 12, weight: .heavy))
             } compactTrailing: {
-                Text("T")
+                Text(context.state.price)
+                    .font(.system(size: 12, weight: .heavy))
+                    .foregroundColor(context.state.state > -1 ? (context.state.state == 0 ? Color.gray : Color.green) : Color.pink)
             } minimal: {
-                Text("Min")
             }
-            .widgetURL(URL(string: "http://www.apple.com"))
+            .widgetURL(URL(string: "upbit://"))
             .keylineTint(Color.red)
         }
     }
