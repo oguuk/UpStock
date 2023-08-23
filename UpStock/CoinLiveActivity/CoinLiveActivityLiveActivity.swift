@@ -47,55 +47,55 @@ struct CoinLiveActivityLiveActivity: Widget {
             let color = context.state.state > -1 ? (context.state.state == 0 ? Color.gray : Color.green) : Color.pink
             
             // Lock screen/banner UI goes here
-            VStack {
+            HStack {
+                Spacer()
                 HStack {
+                    Image(context.state.imageName)
+                        .resizable()
+                        .frame(width: 12, height: 30)
+                        .scaledToFit()
                     
-                    HStack {
-                        Image(context.state.imageName)
-                            .resizable()
-                            .frame(width: 10, height: 30)
-                            .scaledToFit()
-
-                        Text(context.attributes.coinName)
-                            .font(.callout)
-                            .foregroundColor(Color.white)
-                    }
-                    .padding(.leading, 12)
-                    
-                    HStack {
-                        VStack {
-                            Spacer()
-                            Text(context.state.price)
-                                .fontWeight(.semibold)
-                                .foregroundColor(color)
-                            Spacer()
-                        }
-                    }
-                    .padding(.leading, 8)
-                    .padding(.trailing, 8)
-                    
-                    HStack {
-                        VStack {
-                            Spacer()
-                            Text(context.state.priceFluctuation)
-                                .font(.caption2)
-                                .foregroundColor(color)
-                            Text(context.state.tradeVolume)
-                                .font(.caption2)
-                                .foregroundColor(.white)
-                            Spacer()
-                        }
-                        Text(context.state.fluctuationRate)
-                            .fontWeight(.bold)
-                            .padding(.trailing, 12)
+                    Text(context.attributes.coinName)
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(Color.white)
+                }
+                .padding(.leading, 12)
+                Spacer()
+                HStack {
+                    VStack {
+                        Spacer()
+                        Text(context.state.price)
+                            .font(.system(size: 12, weight: .medium))
                             .foregroundColor(color)
+                        Spacer()
                     }
                 }
+                .padding(.leading, 8)
+                .padding(.trailing, 8)
+                Spacer()
+                HStack {
+                    VStack {
+                        Spacer()
+                        Text(context.state.priceFluctuation)
+                            .font(.system(size: 10, weight: .regular))
+                            .foregroundColor(color)
+                        Text(context.state.tradeVolume)
+                            .font(.system(size: 10, weight: .regular))
+                            .foregroundColor(.white)
+                        Spacer()
+                    }
+                    Text(context.state.fluctuationRate)
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(color)
+                }
+                .padding(.trailing, 12)
+                Spacer()
             }
             .activityBackgroundTint(Color.black)
             .activitySystemActionForegroundColor(Color.red)
-
+            
         } dynamicIsland: { context in
+            
             DynamicIsland {
                 // Expanded UI goes here.  Compose the expanded UI through
                 // various regions, like leading/trailing/center/bottom
