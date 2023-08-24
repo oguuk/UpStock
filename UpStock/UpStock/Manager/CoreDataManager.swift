@@ -14,6 +14,19 @@ final class CoreDataManager {
     
     static var `default` = CoreDataManager()
     
+    func count(forEntityName: String) -> Int {
+        var count = 0
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: forEntityName)
+        fetchRequest.resultType = .countResultType
+        do {
+            count = try context?.count(for: fetchRequest) ?? 0
+        } catch {
+            print("Error fetching count: \(error)")
+
+        }
+        return count
+    }
+    
     func save<T>(forEntityName: String, value: T) {
         guard let context = context,
               let entity = NSEntityDescription.entity(forEntityName: forEntityName, in: context) else { return }
