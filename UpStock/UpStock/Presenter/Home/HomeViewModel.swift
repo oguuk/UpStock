@@ -88,6 +88,10 @@ final class HomeViewModel {
         }
     }
     
+    func isBookmark(market: String) -> Bool {
+        return !(CoreDataManager.default.fetch(type: BOOKMARK.self, name: market)?.isEmpty ?? true)
+    }
+    
     private func fetchSocket(coin name: String) {
         
         CoreDataManager.default.fetch(type: KRW.self, name: name)?
