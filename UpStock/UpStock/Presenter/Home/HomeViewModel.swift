@@ -92,6 +92,17 @@ final class HomeViewModel {
         return !(CoreDataManager.default.fetch(type: BOOKMARK.self, name: market)?.isEmpty ?? true)
     }
     
+    func checkPrice(item: TickerResponse) -> Bool? {
+        var returnValue: Bool? = nil
+        if let price = lastTradePrice[item.market] {
+            
+            if price > item.tradePrice { returnValue = false }
+            else if price < item.tradePrice { returnValue = true }
+        }
+        lastTradePrice[item.market] = item.tradePrice
+        return returnValue
+    }
+    
     private func fetchSocket(coin name: String) {
         
         CoreDataManager.default.fetch(type: KRW.self, name: name)?
