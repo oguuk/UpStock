@@ -36,3 +36,21 @@ final class HomeViewModel {
         configureSocket()
     }
     
+    func transform(input: Input) -> Output {
+        let stocksObservable: Observable<[TickerResponse]> = input.keyboard
+            .flatMapLatest { [weak self] text -> Observable<[TickerResponse]> in
+                if text.isEmpty {
+                    return self?.soketsSubject
+                        .map { stocksDict -> [TickerResponse] in
+                            return stocksDict.values.sorted { $0.code < $1.code }
+                            .compactMap { $0.toTickerResponse() }
+                        } ?? .empty()
+                } else {
+                    self?.searchStocks(coinName: text)
+                    return self?.searchResultsSubject ?? .empty()
+                }
+            }
+
+        return Output(stocks: stocksObservable.asDriver(onErrorJustReturn: []))
+    }
+    
