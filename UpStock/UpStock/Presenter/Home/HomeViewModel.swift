@@ -103,6 +103,30 @@ final class HomeViewModel {
         return returnValue
     }
     
+    private func searchStocks(coinName: String) {
+        guard let observables = (CoreDataManager.default
+            .fetch(type: KRW.self, name: coinName)?
+            .map { (krw) -> Observable<[TickerResponse]?> in
+                upbit.fetchTicker(markets: krw.Market ?? "")
+            }) else { return }
+        
+        Observable.combineLatest(observables)
+            .subscribe(
+                onNext: { [weak self] responses in
+                    let updatedResponses = responses.compactMap { // 첫 번째 flatMap을 compactMap으로 변경
+                        $0?.compactMap { // 두 번째 flatMap을 compactMap으로 변경
+                            var newRes = $0
+                            newRes.bookmark = self?.isBookmark(market: newRes.market) ?? false
+                            return newRes
+                        }
+                    }
+                    .flatMap { $0 } // 중첩된 배열을 평평하게 만들기 위한 flatMap
+                    self?.searchResultsSubject.onNext(updatedResponses)
+                }
+            )
+            .disposed(by: disposeBag)
+    }
+    
     private func fetchSocket(coin name: String) {
         
         CoreDataManager.default.fetch(type: KRW.self, name: name)?
