@@ -47,14 +47,10 @@ final class CoreDataManager {
             newData.setValue(v, forKey: k)
         }
         
-        do {
-            try context.save()
-        } catch {
-            print("Failed to save data: \(error)")
-        }
+        contextSave(context: context)
     }
     
-    func fetch<T: NSManagedObject>(type: T.Type) -> [T]? {
+    func fetch<T: NSManagedObject & Nameable>(type: T.Type, name: String? = nil) -> [T]? {
         guard let context else { return nil }
         var data: [T]?
         do {
