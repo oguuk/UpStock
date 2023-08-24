@@ -192,3 +192,33 @@ extension HomeViewModel {
         }
     }
     
+    private func liveActivityImage(ticker data: WebsocketTickerResponse) -> String {
+        let curr = data.tradePrice, open = data.openingPrice, high = data.highPrice, low = data.lowPrice
+        
+        if curr > open {
+            if high == curr {
+                if open == low { return "bigRise" }
+                else { return "rise1" }
+            } else {
+                if  open == low { return "rise3" }
+                else { return "rise2" }
+            }
+        } else if curr < open {
+            if low == curr {
+                if open == high { return "bigFall" }
+                else { return "fall3" }
+            } else {
+                if  open == high { return "fall1" }
+                else { return "fall2" }
+            }
+        } else {
+            if high == curr {
+                if open == low { return "even" }
+                else { return "even1" }
+            } else {
+                if  open == low { return "even3" }
+                else { return "even2" }
+            }
+        }
+    }
+}
