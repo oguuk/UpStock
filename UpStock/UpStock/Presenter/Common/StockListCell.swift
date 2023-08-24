@@ -118,8 +118,8 @@ final class StockListCell: UITableViewCell, Identifiable {
         ])
     }
     
-    func configure(ticker: WebsocketTickerResponse) {
-        coinName.text = CoreDataManager.default.fetch(type: KRW.self)?.filter { $0.market == ticker.code }.first?.koreanName ?? ""
+    func configure(ticker: TickerResponse) {
+        coinName.text = CoreDataManager.default.fetch(type: KRW.self)?.filter { $0.market == ticker.market }.first?.koreanName ?? ""
         if ticker.change == "RISE" {
             change.tintColor = .green
             priceFluctuation.textColor = .green
@@ -133,15 +133,15 @@ final class StockListCell: UITableViewCell, Identifiable {
             priceFluctuation.textColor = .gray
             fluctuationRate.textColor = .gray
         }
-        market.text = ticker.code
+        market.text = ticker.market
         price.text = ticker.tradePrice.formattedWithSeparator
-        priceFluctuation.text = ticker.changePrice.formattedWithSeparator
+        priceFluctuation.text = ticker.signedChangePrice.formattedWithSeparator
         tradingVolume.text = "\(ticker.accTradePrice24H.toPercentage(3))"
         fluctuationRate.text = "\(ticker.signedChangeRate.toPercentage(2, 100))%"
     }
     
-    func configureCandleImage(ticker data: WebsocketTickerResponse) {
-        var curr = Int(data.tradePrice), open = data.openingPrice, high = data.highPrice, low = data.lowPrice
+    func configureCandleImage(ticker data: TickerResponse) {
+        let curr = data.tradePrice, open = data.openingPrice, high = data.highPrice, low = data.lowPrice
         
         if curr > open {
             if high == curr {
