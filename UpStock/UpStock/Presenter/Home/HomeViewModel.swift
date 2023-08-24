@@ -22,3 +22,17 @@ final class HomeViewModel {
     struct Output {
         let stocks: Driver<[TickerResponse]> //Observable<[SectionModel<String, WebsocketTickerResponse>]>
     }
+    
+    private let upbit: UpbitAPIManager = UpbitAPIManager()
+    private var sockets: [String : UpbitWebSocketClient] = [:]
+    private let soketsSubject: BehaviorSubject<[String : WebsocketTickerResponse]> = BehaviorSubject<[String : WebsocketTickerResponse]>(value: [:])
+    private let searchResultsSubject: BehaviorSubject<[TickerResponse]> = BehaviorSubject<[TickerResponse]>(value: [])
+    private var lastTradePrice: [String : Double] = [:]
+    private let disposeBag: DisposeBag = DisposeBag()
+    let starActionSubject = PublishSubject<IndexPath>()
+    var activities: [String : Activity<CoinLiveActivityAttributes>] = [:]
+    
+    init() {
+        configureSocket()
+    }
+    
