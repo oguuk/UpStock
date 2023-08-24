@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class StockListCell: UICollectionViewCell {
+final class StockListCell: UITableViewCell, Identifiable {
     
     lazy var change: UIImageView = {
         let view = UIImageView()
@@ -57,8 +57,8 @@ final class StockListCell: UICollectionViewCell {
         return label
     }()
         
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureUI()
         configureLayout()
     }
@@ -74,6 +74,8 @@ final class StockListCell: UICollectionViewCell {
     }
     
     func configureUI() {
+        backgroundColor = .black
+        selectionStyle = .none
         [change, coinName, market,
          price, priceFluctuation, tradingVolume,
          fluctuationRate].forEach {
