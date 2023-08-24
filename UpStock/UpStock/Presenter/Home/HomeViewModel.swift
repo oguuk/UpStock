@@ -60,6 +60,34 @@ final class HomeViewModel {
         }
     }
     
+    func bookmark(market: String) {
+        if !isBookmark(market: market) {
+            if CoreDataManager.default.count(forEntityName: "BOOKMARK") > 5 {
+                print("5개를 초과합니다.")
+                return
+            }
+            guard let datas = CoreDataManager.default.fetch(type: KRW.self, name: market),
+                  let data = datas.first else { return }
+            let marketValue = Market(market: data.market!, koreanName: data.koreanName!, englishName: data.englishName!)
+            CoreDataManager.default.save(forEntityName: "BOOKMARK", value: marketValue)
+            fetchSocket(coin: market)
+        }
+    }
+    
+    func unBookmark(market: String) {
+        CoreDataManager.default.delete(type: BOOKMARK.self, name: market)
+        sockets[market] = nil
+
+        if var currentStocks = try? soketsSubject.value() {
+            currentStocks[market] = nil
+            soketsSubject.onNext(currentStocks)
+        }
+
+        sockets.keys.forEach {
+            fetchSocket(coin: $0)
+        }
+    }
+    
     private func fetchSocket(coin name: String) {
         
         CoreDataManager.default.fetch(type: KRW.self, name: name)?
