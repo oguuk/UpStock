@@ -63,6 +63,15 @@ final class CoreDataManager {
             print(error.localizedDescription)
         }
         return data
+    
+    func delete<T: NSManagedObject & Nameable>(type: T.Type, name: String? = nil) {
+        guard let context else { return }
+        guard let objects = fetch(type: type, name: name) else { return }
+        for object in objects {
+            context.delete(object)
+            print("DEBUG : delete Complete \(object.entity.properties.map { $0.name })")
+        }
+        contextSave(context: context)
     }
     
     private func existEntityWith(uniqueValue: String, entityName: String) -> Bool {
