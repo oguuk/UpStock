@@ -157,3 +157,38 @@ final class HomeViewModel {
         }
     }
 }
+
+// MARK: -LiveActivity
+extension HomeViewModel {
+    
+    private func startLiveActivity(ticker: WebsocketTickerResponse) async {
+        if #available(iOS 16.2, *) {
+            if ActivityAuthorizationInfo().areActivitiesEnabled {
+                let initialContentState = CoinLiveActivityAttributes.ContentState(
+                    imageName: liveActivityImage(ticker: ticker),
+                    price: ticker.tradePrice.formattedWithSeparator,
+                    tradeVolume: ticker.accTradePrice24H.toPercentage(3),
+                    fluctuationRate: "\(ticker.signedChangeRate.toPercentage(2, 100))%",
+                    priceFluctuation: ticker.signedChangePrice.formattedWithSeparator, // 비트토렌트 같은 경우 0으로 나옴
+                    state: ticker.signedChangePrice > 0 ? 1 : (ticker.signedChangePrice == 0 ? 0 : -1)
+                )
+
+                let activityAttributes = CoinLiveActivityAttributes(coinName: ticker.code)
+                let activityContent = ActivityContent(state: initialContentState, staleDate: Calendar.current.date(byAdding: .minute, value: 10, to: Date())!)
+
+                do {
+                    if !activities.keys.contains(ticker.code) {
+                        let activity = try Activity.request(attributes: activityAttributes, content: activityContent)
+                        activities[ticker.code] = activity
+                        print("Requested Lockscreen Live Activity(Timer) \(String(describing: activity.id)).")
+                    } else {
+                        print("update중")
+                        try await activities[ticker.code]?.update(activityContent)
+                    }
+                } catch (let error) {
+                    print("Error requesting Lockscreen Live Activity(Timer) \(error.localizedDescription).")
+                }
+            }
+        }
+    }
+    
