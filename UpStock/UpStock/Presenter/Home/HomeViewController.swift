@@ -49,3 +49,27 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate {
     private func delegateTableView() {
         homeView.tableView.rx.setDelegate(self).disposed(by: disposeBag)
     }
+}
+
+extension HomeViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        var isBookamark = false
+        if let cell = tableView.cellForRow(at: indexPath) as? StockListCell, let market = cell.market.text {
+            isBookamark = self.viewModel.isBookmark(market: market)
+        }
+        let customAction = UIContextualAction(style: .normal, title: nil) { (action, view, completionHandler) in
+            if let cell = tableView.cellForRow(at: indexPath) as? StockListCell, let market = cell.market.text {
+                isBookamark = self.viewModel.isBookmark(market: market)
+                if isBookamark { self.viewModel.unBookmark(market: market) }
+                else { self.viewModel.bookmark(market: market) }
+            }
+            completionHandler(true)
+        }
+        
+        customAction.image = UIImage(systemName: "star.fill")?.withTintColor( isBookamark ? .yellow : .white, renderingMode: .alwaysOriginal)
+        customAction.backgroundColor = .darkGray
+        
+        return UISwipeActionsConfiguration(actions: [customAction])
+    }
+}
