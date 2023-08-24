@@ -45,3 +45,7 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate {
             }
             .disposed(by: disposeBag)
     }
+    
+    private func delegateTableView() {
+        homeView.tableView.rx.setDelegate(self).disposed(by: disposeBag)
+    }
