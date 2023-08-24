@@ -10,7 +10,6 @@ import UIKit
 final class HomeView: UIView {
     
     private enum Constant {
-        static let stockListCellID = "stockListCell"
         static let padding: CGFloat = 10
         static let textFieldHeight: CGFloat = 30
     }
