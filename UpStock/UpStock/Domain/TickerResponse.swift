@@ -12,22 +12,22 @@ import Foundation
 typealias TickerResponses = [TickerResponse]
 
 struct TickerResponse: Codable {
-    
+        
     let market, tradeDate, tradeTime, tradeDateKst: String
     let tradeTimeKst: String
-    let tradeTimestamp, openingPrice, highPrice, lowPrice: Int
-    let tradePrice, prevClosingPrice: Int
+    let tradeTimestamp: Int
+    let openingPrice, highPrice, lowPrice: Double
+    let tradePrice, prevClosingPrice: Double
     let change: String
-    let changePrice: Int
-    let changeRate: Double
-    let signedChangePrice: Int
-    let signedChangeRate, tradeVolume, accTradePrice, accTradePrice24H: Double
+    let changePrice, changeRate: Double
+    let signedChangePrice, signedChangeRate, tradeVolume, accTradePrice, accTradePrice24H: Double
     let accTradeVolume, accTradeVolume24H: Double
-    let highest52_WeekPrice: Int
+    let highest52_WeekPrice: Double
     let highest52_WeekDate: String
-    let lowest52_WeekPrice: Int
+    let lowest52_WeekPrice: Double
     let lowest52_WeekDate: String
     let timestamp: Int
+    var bookmark: Bool = false
 
     enum CodingKeys: String, CodingKey {
         case market
