@@ -62,7 +62,8 @@ final class CoreDataManager {
         } catch {
             print(error.localizedDescription)
         }
-        return data
+        return name == nil ? data : data?.filter { $0.Market! == name! || $0.KoreanName!.contains(name!) || $0.EnglishName!.contains(name!) }
+    }
     
     func delete<T: NSManagedObject & Nameable>(type: T.Type, name: String? = nil) {
         guard let context else { return }
