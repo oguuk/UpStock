@@ -88,4 +88,13 @@ final class CoreDataManager {
             return false
         }
     }
+    
+    private func contextSave(context: NSManagedObjectContext) {
+        do {
+            try context.save()
+            print("DEBUG: Save after delete successful!")
+        } catch {
+            print("DEBUG: Error saving context after delete: \(error)")
+        }
+    }
 }
