@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Int {
+extension Double {
     
     var formattedWithSeparator: String {
         let numberFormatter = NumberFormatter()
