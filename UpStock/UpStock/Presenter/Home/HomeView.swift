@@ -33,12 +33,11 @@ final class HomeView: UIView {
     }()
 
     
-    lazy var collectionView: UICollectionView = {
-        let layout = createLayout()
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .black
-        cv.register(StockListCell.self, forCellWithReuseIdentifier: Constant.stockListCellID)
-        return cv
+    lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .black
+        tableView.register(StockListCell.self, forCellReuseIdentifier: StockListCell.identifier)
+        return tableView
     }()
     
     override init(frame: CGRect) {
@@ -52,7 +51,7 @@ final class HomeView: UIView {
     }
     
     private func setupViews() {
-        [textField, collectionView]
+        [textField, tableView]
             .forEach {
                 $0.translatesAutoresizingMaskIntoConstraints = false
                 addSubview($0)
@@ -64,21 +63,10 @@ final class HomeView: UIView {
             textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.padding),
             textField.heightAnchor.constraint(equalToConstant: Constant.textFieldHeight),
             
-            collectionView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: Constant.padding),
-            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            tableView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: Constant.padding),
+            tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-    }
-    
-    private func createLayout() -> UICollectionViewCompositionalLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(80))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: 1)
-        
-        let section = NSCollectionLayoutSection(group: group)
-        return UICollectionViewCompositionalLayout(section: section)
     }
 }
