@@ -54,3 +54,39 @@ final class HomeViewModel {
         return Output(stocks: stocksObservable.asDriver(onErrorJustReturn: []))
     }
     
+    func configureSocket() {
+        CoreDataManager.default.fetch(type: BOOKMARK.self)?.forEach {
+            fetchSocket(coin: $0.market!)
+        }
+    }
+    
+    private func fetchSocket(coin name: String) {
+        
+        CoreDataManager.default.fetch(type: KRW.self, name: name)?
+            .forEach { coin in
+                let request = "[{\"ticket\":\"Upstock\"},{\"type\":\"ticker\",\"codes\":[\"\(coin.market!)\"]}]"
+                let service = UpbitWebSocketClient(request: request)
+                sockets[coin.market!] = service
+                sockets[coin.market!]?.dataSubject
+                    .subscribe(onNext: { [weak self] data in
+                        do {
+                            guard let ticker = try? JSONDecoder().decode(WebsocketTickerResponse.self, from: data) else { return }
+                            if var currentStocks = try? self?.soketsSubject.value() {
+                                currentStocks[ticker.code] = ticker
+                                Task { [weak self] in
+                                    await self?.startLiveActivity(ticker: ticker)
+                                }
+                                
+                                self?.soketsSubject.onNext(currentStocks)
+                            } else {
+                                self?.soketsSubject.onNext([ticker.code: ticker])
+                            }
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    })
+                    .disposed(by: disposeBag)
+                sockets[coin.market!]?.start()
+        }
+    }
+}
