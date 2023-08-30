@@ -37,3 +37,13 @@ struct CandleData: Codable {
         case firstDayOfPeriod = "first_day_of_period"
     }
 }
+
+extension CandleData {
+    
+    var date: Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        return dateFormatter.date(from: candleDateTimeUTC) ?? Date()
+    }
+}
